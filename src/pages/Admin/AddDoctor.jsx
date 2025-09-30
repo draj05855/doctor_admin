@@ -41,16 +41,33 @@ const AddDoctor = () => {
       formData.append('degree', degree)
       formData.append('address', JSON.stringify({ line1: address1, line2: address2 }))
 
-      const { data } = await axios.post(
-        backendUrl + '/api/admin/add-doctor',
-        formData,
-        {
-          headers: {
-            'token': aToken, // 🛑 FIX for 401 Unauthorized (Matches your server's authAdmin.js)
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      )
+      // const { data } = await axios.post(
+      //   backendUrl + '/api/admin/add-doctor',
+      //   formData,
+      //   {
+      //     headers: {
+      //       'token': aToken, // 🛑 FIX for 401 Unauthorized (Matches your server's authAdmin.js)
+      //       'Content-Type': 'multipart/form-data'
+      //     }
+      //   }
+      // )
+
+     const { data } = await axios.post(
+  backendUrl + '/api/admin/add-doctor',
+  formData,
+  {
+    headers: {
+      Authorization: `Bearer ${aToken}`, // Must match authAdmin expectation
+      'Content-Type': 'multipart/form-data',
+    },
+  }
+);
+
+
+
+
+
+
 
       if (data.success) {
         toast.success(data.message)
