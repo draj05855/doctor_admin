@@ -1,7 +1,5 @@
-import React from "react";
-import { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AdminContext } from "../../context/AdminContext";
-import { useEffect } from "react";
 import { assets } from "../../assets/assets";
 
 const Dashboard = () => {
@@ -9,74 +7,72 @@ const Dashboard = () => {
     useContext(AdminContext);
 
   useEffect(() => {
-    if (aToken) {
-      getDashData();
-    }
+    if (aToken) getDashData();
   }, [aToken]);
+
   return (
-    dashData && (
-      <div className="m-5">
-        <div className="flex flex-wrap gap-3">
-          <div className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">
-            <img className="w-14" src={assets.doctor_icon} alt="" />
-            <div>
-              <p className="text-xl font-semibold text-gray-600 ">
-                {dashData.doctors}
-              </p>
-              <p className="text-gray-400">Doctors</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">
-            <img className="w-14" src={assets.appointment_icon} alt="" />
-            <div>
-              <p className="text-xl font-semibold text-gray-600 ">
-                {dashData.appointments}
-              </p>
-              <p className="text-gray-400">Appointments</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">
-            <img className="w-14" src={assets.patients_icon} alt="" />
-            <div>
-              <p className="text-xl font-semibold text-gray-600 ">
-                {dashData.patients}
-              </p>
-              <p className="text-gray-400">patients</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white">
-          <div className="flex items-center gap-2.5 px-4 py-4 mt-10 rounded-t border">
-            <img src={assets.list_icon} alt="" />
-            <p className="font-semibold">Latest Booking</p>
-          </div>
-          <div className="pt-4 border border-t-0">
-            {dashData.latestAppointments.map((item, index) => (
-              <div className="flex items-center px-6 py-3 gap-3 hover:bg-gary-100" key={index}>
-                <img className='rounded-full w-10' src={item.docData.image} alt="" />
-                <div className="flex-1 text-sm">
-                  <p className="text-gray-800 font-medium">{item.docData.name}</p>
-                  <p className="text-gray-600 ">{item.slotDate}</p>
+    <div className=" min-h-screen p-5 text-[#E0E0E0]">
+      {dashData && (
+        <>
+          {/* Stats Cards */}
+          <div className="flex flex-wrap gap-3">
+            {[
+              { icon: assets.doctor_icon, count: dashData.doctors, label: "Doctors" },
+              { icon: assets.appointment_icon, count: dashData.appointments, label: "Appointments" },
+              { icon: assets.patients_icon, count: dashData.patients, label: "Patients" },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 bg-[#1A1A1A] p-4 min-w-52 rounded border border-gray-700 cursor-pointer hover:scale-105 hover:border-[#FF6B00] hover:shadow-[0_0_15px_#FF6B00] transition-all"
+              >
+                <img className="w-14" src={item.icon} alt={item.label} />
+                <div>
+                  <p className="text-xl font-semibold text-[#E0E0E0]">{item.count}</p>
+                  <p className="text-gray-400">{item.label}</p>
                 </div>
-                {item.cancelled ? (
-                  <p className="text-red-400 text-xs font-medium">Cancelled</p>
-                ) : (
-                  <img
-                    onClick={() => cancelAppointment(item._id)}
-                    className="w-5 h-5 cursor-pointer"
-                    src={assets.cancel_icon}
-                    alt="Cancel"
-                  />
-                )}
               </div>
             ))}
           </div>
-        </div>
-      </div>
-    )
+
+          {/* Latest Booking */}
+          <div className="bg-[#1A1A1A] mt-10 rounded border border-gray-700">
+            <div className="flex items-center gap-2.5 px-4 py-4 rounded-t border-b border-gray-700">
+              <img src={assets.list_icon} alt="" />
+              <p className="font-semibold text-[#FF6B00]">Latest Booking</p>
+            </div>
+
+            <div className="pt-4">
+              {dashData.latestAppointments.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-center px-6 py-3 gap-3 hover:bg-[#2A2A2A] transition-colors rounded-md"
+                >
+                  <img
+                    className="rounded-full w-10 border-2 border-gray-700 hover:border-[#FF6B00]"
+                    src={item.docData.image}
+                    alt={item.docData.name}
+                  />
+                  <div className="flex-1 text-sm">
+                    <p className="text-[#E0E0E0] font-medium">{item.docData.name}</p>
+                    <p className="text-gray-400">{item.slotDate}</p>
+                  </div>
+                  {item.cancelled ? (
+                    <p className="text-red-400 text-xs font-medium">Cancelled</p>
+                  ) : (
+                    <img
+                      onClick={() => cancelAppointment(item._id)}
+                      className="w-5 h-5 cursor-pointer hover:scale-110 transition-all"
+                      src={assets.cancel_icon}
+                      alt="Cancel"
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 

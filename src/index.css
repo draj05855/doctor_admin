@@ -4,6 +4,13 @@
 ::-webkit-scrollbar{
   @apply hidden
 }
+html, body, #root {
+  background-color: #0D0D0D; /* your dark color */
+  color: #E0E0E0; /* optional, default text color */
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
 
 *{
   font-family: Outfit;
